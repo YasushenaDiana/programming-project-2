@@ -1,0 +1,72 @@
+Build: Release
+Optimization: off
+Hardware threads: 8
+Each time is an average of 5 runs
+Fast operation: x * 2 + 1
+Slow operation: sqrt(|sin x| + cos^2 x) + ln(|x| + 1) * atan x
+
+===== Fast operation =====
+Library transform, time in ms:
+  policy             n = 10000      n = 100000     n = 1000000
+  no policy             0.0754          0.6584          6.5096
+  seq                   0.0669          0.6278          6.3138
+  par                   0.0546          0.2503          1.4432
+  unseq                 0.0440          0.4432          4.4634
+  par_unseq             0.0389          0.1427          1.0524
+  all results correct: true
+
+Own parallel transform, time in ms:
+  K                  n = 10000      n = 100000     n = 1000000
+  1                     0.1723          1.4039         13.9741
+  2                     0.1463          0.9155          9.0202
+  3                     0.1435          0.7717          7.2382
+  4                     0.1288          0.6761          6.3168
+  5                     0.1534          0.7348          6.7008
+  6                     0.1565          0.7010          6.1888
+  7                     0.1745          0.6828          5.8611
+  8                     0.1682          0.6624          5.6378
+  16                    0.2234          0.7224          5.6237
+  32                    0.4044          0.7974          5.6581
+  64                    0.7398          1.0814          6.2880
+  128                   1.4244          1.7176          6.2491
+  256                   3.0473          3.8886          7.3988
+  all results correct: true
+  n = 10000: best K = 4 (0.1288 ms), hardware threads = 8, K / threads = 0.50
+  n = 100000: best K = 8 (0.6624 ms), hardware threads = 8, K / threads = 1.00
+  n = 1000000: best K = 16 (5.6237 ms), hardware threads = 8, K / threads = 2.00
+
+===== Slow operation =====
+Library transform, time in ms:
+  policy             n = 10000      n = 100000     n = 1000000
+  no policy             0.3456          3.2352         32.2537
+  seq                   0.3337          3.2728         32.7444
+  par                   0.1137          0.7467          7.0356
+  unseq                 0.3388          3.2137         32.3265
+  par_unseq             0.1224          0.7304          6.9183
+  all results correct: true
+
+Own parallel transform, time in ms:
+  K                  n = 10000      n = 100000     n = 1000000
+  1                     0.4344          4.0274         40.4580
+  2                     0.2739          2.2998         22.5787
+  3                     0.2407          1.7097         16.6166
+  4                     0.2032          1.4016         13.4225
+  5                     0.2580          1.7066         16.1332
+  6                     0.2605          1.5325         14.3097
+  7                     0.2355          1.3765         12.8505
+  8                     0.2477          1.2843         11.8328
+  16                    0.2783          1.2584         11.6863
+  32                    0.4390          1.3962         11.6129
+  64                    0.7987          1.6211         11.6282
+  128                   1.4975          2.3363         11.9057
+  256                   2.9876          3.3969         12.9056
+  all results correct: true
+  n = 10000: best K = 4 (0.2032 ms), hardware threads = 8, K / threads = 0.50
+  n = 100000: best K = 16 (1.2584 ms), hardware threads = 8, K / threads = 2.00
+  n = 1000000: best K = 32 (11.6129 ms), hardware threads = 8, K / threads = 4.00
+
+===== Fast vs slow operation (no policy) =====
+           n        fast, ms        slow, ms   slow/fast
+       10000          0.0754          0.3456         4.6
+      100000          0.6584          3.2352         4.9
+     1000000          6.5096         32.2537         5.0
